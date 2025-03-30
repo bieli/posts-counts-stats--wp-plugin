@@ -38,7 +38,7 @@ Compatibility with WP versions from `6.1.x` to `6.7.x` (not tested with WP dev/t
 
 ![Visual effect of usage this plugin in WP admin](bieli_giithub__posts-counts-stats--wp-plugin1.png)
 
-![Visual effect of usage this plugin in WP admin dashboard widget](bieli_giithub__posts-counts-stats--wp-plugin3.png)
+![Visual effect of usage this plugin in WP admin dashboard widget](bieli_giithub__posts-counts-stats--wp-plugin4.png)
 
 ## Development basic steps (depends on your env.)
 
