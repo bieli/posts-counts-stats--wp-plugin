@@ -9,6 +9,8 @@ There are links on count number with redirect to posts list and filter for parti
 
 ## How to install inside Wordpress
 
+Compatibility with WP versions from `6.1.x` to `6.7.x` (not tested with WP dev/trunk branch!).
+
 ### With server SSH access (manual create folder and file inside plugins dir)
 
 1. Create a new folder in your `wp-content/plugins` directory, e.g., posts-counts-stats.
