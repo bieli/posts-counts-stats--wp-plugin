@@ -5,6 +5,8 @@ WordPress plugin for display in yearly/monthly posts counts statistics inside WP
 
 Display yearly and monthly posts counts in WordPress admin settings in a hierarchical format.
 
+There are links on count number with redirect to posts list and filter for particular year and month, so you can review posts from selected year and month.
+
 ## How to install inside Wordpress
 
 1. Create a new folder in your wp-content/plugins directory, e.g., posts-counts-stats.
