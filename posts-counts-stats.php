@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Posts Counts Stats
-Description: Display yearly and monthly posts counts in WordPress admin settings in a hierarchical format.
-Version: 1.1
-Author: Marcin Bielak - https://github.com/bieli/posts-counts-stats--wp-plugin
+Plugin Name: Posts Count Stats
+Description: Display yearly and monthly posts counts in WordPress admin settings in a hierarchical format + dashboard widget.
+Version: 1.2
+Author: Marcin Bielak - https://github.com/bieli
 */
 
 if (!defined('ABSPATH')) {
@@ -12,7 +12,8 @@ if (!defined('ABSPATH')) {
 
 class Post_Count_Stats {
     public function __construct() {
-        add_action('admin_menu', [$this, 'add_settings_page']);
+	    add_action('admin_menu', [$this, 'add_settings_page']);
+	    add_action('wp_dashboard_setup', [$this, 'add_dashboard_widget']);
     }
 
     public function add_settings_page() {
@@ -25,8 +26,14 @@ class Post_Count_Stats {
         );
     }
 
-    public function render_settings_page() {
-        global $wpdb;
+    public function render_settings_page($year_only = false) {
+	    global $wpdb;
+
+      if ($year_only == true) {
+          $wd = '100';
+      } else {
+          $wd = '12';
+      }
 
         echo '<div class="wrap">';
         echo '<h1>Posts Count Stats</h1>';
@@ -61,35 +68,56 @@ class Post_Count_Stats {
 
         // Display stats
         foreach ($organized_stats as $year => $months) {
-            echo '<h2 style="width: 12%;">Year: <span style="float: right;">' . esc_html($year) . '</span></h2>';
+            echo '<h2 style="width: ' . $wd . '%;">Year: <span style="float: right;">' . esc_html($year) . '</span></h2>';
             $yearly_total = array_sum($months);
-            echo '<p style="margin-left: 2%; width: 10%;">Total Posts: <span style="float: right;">' . esc_html($yearly_total) . '</span></p>';
-            echo '<ul style="margin-left: 2%; width: 10%;">';
+            echo '<h4 style="margin-left: 0%; width: ' . $wd . '%;">Total Posts: <span style="float: right;">' . esc_html($yearly_total) . '</span></h4>';
+	          if ($year_only == false) {
+	          echo '<ul style="margin-left: 2%; width: 10%;">';
             foreach ($months as $month => $post_count) {
                 $month_name = date('F', mktime(0, 0, 0, $month, 1));
                 if ($post_count == 0) {
                     $c_color = '#afafaf';
+                    $shape = ''; //'■ ';
+                    $s_color = 'red';
                     $post_count_link = esc_html($post_count);
                 } else {
                     if ($post_count > 4) {
-                        $c_color = 'green';
+                        $s_color = 'green';
+                        $shape = ''; //'▴';
                     } else {
-                        $c_color = 'red';
+                        $s_color = 'red';
+                        $shape = ''; //'▾';
                     }
+                    $c_color = '#000000';
                     // Generate link for filtering posts in the admin post list
                     $filter_url = admin_url('edit.php?post_type=post') . '&m=' . sprintf('%04d%02d', $year, $month);
                     $post_count_link = '<a href="' . esc_url($filter_url) . '">' . esc_html($post_count) . '</a>';
                 }
 
-                $all_posts += $post_count;
 
-                echo '<li>' . esc_html($month_name) . ': <span style="float: right; color: ' . $c_color . '">' . $post_count_link . '</span></li>';
-            }
-            echo '</ul>';
+                echo '<li>' . esc_html($month_name) . ': 
+<span style="float: right; color: ' . $s_color . '">' . $shape . '</span> <span style="margin-right: 1%;float: right; color: ' . $c_color . '">' . $post_count_link . '</span> </li>';
+	            }
+	          }
+            $all_posts += array_sum($organized_stats[$year]);
+	    
+            echo '</ul><hr />';
         }
 
         echo '</div>';
-        echo '<h2 style="width: 12%;">All posts count: <span style="float: right;">' . $all_posts . '</span></h2>';
+        echo '<h2 style="width: ' . $wd . '%;">All posts count: <span style="float: right;">' . $all_posts . '</span></h2>';
+    }
+
+    public function render_widget() {
+	$this->render_settings_page($year_only = true);
+    }
+
+    public function add_dashboard_widget() {
+        wp_add_dashboard_widget(
+            'posts_counts_stats_widget',
+            'Yearly Posts Counts Summary',
+            [$this, 'render_widget']
+        );
     }
 }
 
