@@ -20,3 +20,11 @@ There are links on count number with redirect to posts list and filter for parti
 ## How it works (view with random data about posts)
 
 ![Visual effect of usage this plugin in WP admin](bieli_giithub__posts-counts-stats--wp-plugin1.png)
+
+## Development basic steps (depends on your env.)
+
+1. Run `composer install` to install dependencies.
+
+2. You need to add/modify unit test files under tests/ (e.g., tests/Unit/PostsCountsStatsTest.php).
+
+2. Execute tests with `composer test` or `vendor/bin/phpunit`.
