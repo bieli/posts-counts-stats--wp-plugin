@@ -7,6 +7,8 @@ Display yearly and monthly posts counts in WordPress admin settings in a hierarc
 
 There are links on count number with redirect to posts list and filter for particular year and month, so you can review posts from selected year and month.
 
+There is additional dashboard widget for WP admin cocpit main page (with only yearly summaries of posts counts).
+
 ## How to install inside Wordpress
 
 Compatibility with WP versions from `6.1.x` to `6.7.x` (not tested with WP dev/trunk branch!).
@@ -33,6 +35,8 @@ Compatibility with WP versions from `6.1.x` to `6.7.x` (not tested with WP dev/t
 ## How it works (view with random data about posts)
 
 ![Visual effect of usage this plugin in WP admin](bieli_giithub__posts-counts-stats--wp-plugin1.png)
+
+![Visual effect of usage this plugin in WP admin dashboard widget](bieli_giithub__posts-counts-stats--wp-plugin2.png)
 
 ## Development basic steps (depends on your env.)
 
