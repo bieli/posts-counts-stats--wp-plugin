@@ -1,4 +1,4 @@
-# posts-counts-stats--wp-plugin
+# posts-counts-stats WordPress plugin
 
 ## Intro
 WordPress plugin for display in yearly/monthly posts counts statistics inside WP' admin panel.
