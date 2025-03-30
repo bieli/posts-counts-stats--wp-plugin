@@ -9,6 +9,8 @@ There are links on count number with redirect to posts list and filter for parti
 
 There is additional dashboard widget for WP admin cocpit main page (with only yearly summaries of posts counts). You can go to details page (with monthly posts counts stats) from widget (link exists).
 
+You can see yearly stats on simple bar graph, too.
+
 ## How to install inside Wordpress
 
 Compatibility with WP versions from `6.1.x` to `6.7.x` (not tested with WP dev/trunk branch!).
