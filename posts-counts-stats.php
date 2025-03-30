@@ -115,7 +115,7 @@ class Post_Count_Stats {
     public function add_dashboard_widget() {
         wp_add_dashboard_widget(
             'posts_counts_stats_widget',
-            'Yearly Posts Counts Summary',
+            'Yearly Post Counts Summary <a href="' . esc_url(admin_url('options-general.php?page=posts-counts-stats')) . '" class="button" style="float:right;">Go to details</a>',
             [$this, 'render_widget']
         );
     }
