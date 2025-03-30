@@ -16,3 +16,5 @@ Display yearly and monthly posts counts in WordPress admin settings in a hierarc
 4. Navigate to `Settings > Posts Counts Stats` in the WordPress admin menu to view the stats.
 
 ## How it works (view with random data about posts)
+
+![Visual effect of usage this plugin in WP admin](bieli_giithub__posts-counts-stats--wp-plugin1.png)
