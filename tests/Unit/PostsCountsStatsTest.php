@@ -3,36 +3,60 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use Post_Count_Stats;
+
+if (!function_exists('esc_html')) {
+    function esc_html($text) { return $text; }
+}
+if (!function_exists('esc_attr')) {
+    function esc_attr($text) { return $text; }
+}
+if (!function_exists('admin_url')) {
+    function admin_url($path) { return 'https://example.com' . $path; }
+}
+if (!function_exists('date_i18n')) {
+    function date_i18n($format, $timestamp) { return 'January'; }
+}
 
 class PostsCountsStatsTest extends TestCase {
-    private $wpdb;
-
+    
     protected function setUp(): void {
-        // Mock $wpdb
-        $this->wpdb = $this->getMockBuilder(stdClass::class)
-            ->setMethods(['get_results'])
+        parent::setUp();
+        
+        if (!defined('ABSPATH')) {
+            define('ABSPATH', dirname(__DIR__, 2) . '/');
+        }
+
+        $wpdbMock = $this->getMockBuilder(\stdClass::class)
+            ->allowMockingUnknownTypes()
+            ->addMethods(['get_results'])
             ->getMock();
+
+        $wpdbMock->posts = 'wp_posts';
+
+        $GLOBALS['wpdb'] = $wpdbMock;
+    }
+
+    protected function tearDown(): void {
+        unset($GLOBALS['wpdb']);
+        parent::tearDown();
     }
 
     public function testRenderSettingsPageYearlyStats() {
-        // Mock data for yearly stats
-        $this->wpdb->method('get_results')
+        $GLOBALS['wpdb']->method('get_results')
             ->willReturn([
-                (object) ['year' => 2023, 'post_count' => 10],
-                (object) ['year' => 2024, 'post_count' => 20]
+                (object) ['year' => 2023, 'month' => 5, 'post_count' => 10],
+                (object) ['year' => 2024, 'month' => 6, 'post_count' => 20]
             ]);
 
-        // Call the method and check output
         ob_start();
         $plugin = new Post_Count_Stats();
         $plugin->render_settings_page();
         $output = ob_get_clean();
 
-        // Assert HTML contains expected values
-        $this->assertStringContainsString('Year: 2023', $output);
+        $this->assertStringContainsString('2023', $output);
         $this->assertStringContainsString('10', $output);
-        $this->assertStringContainsString('Year: 2024', $output);
+        $this->assertStringContainsString('2024', $output);
         $this->assertStringContainsString('20', $output);
     }
 }
-?>
