@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 
-class PostCountStatsTest extends TestCase {
+class PostsCountsStatsTest extends TestCase {
     private $wpdb;
 
     protected function setUp(): void {
