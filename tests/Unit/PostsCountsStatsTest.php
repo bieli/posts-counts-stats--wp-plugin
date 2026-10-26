@@ -1,4 +1,7 @@
 <?php
+
+namespace Tests\Unit;
+
 use PHPUnit\Framework\TestCase;
 
 class PostCountStatsTest extends TestCase {
