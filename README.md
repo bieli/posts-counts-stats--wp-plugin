@@ -1,5 +1,9 @@
 # posts-counts-stats WordPress plugin
 
+![CI status](https://github.com/bieli/posts-counts-stats--wp-plugin/actions/workflows/php.yml/badge.svg)
+![github_tag](https://img.shields.io/github/v/tag/bieli/posts-counts-stats--wp-plugin)
+
+
 ## Intro
 WordPress plugin for display yearly/monthly posts counts statistics inside WP' admin panel.
 
