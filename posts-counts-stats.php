@@ -3,7 +3,7 @@
 Plugin Name: Posts Counts Stats
 Description: Display yearly and monthly posts counts in WordPress admin settings in a hierarchical matrix format + dashboard widget.
 Version: 1.4.0
-Author: Marcin Bielak - https://github.com/bieli/posts-counts-stats--wp-plugin
+Author: Marcin Bielak - https://github.com/bieli/posts-counts-stats--wp-plugin/
 */
 
 if (!defined('ABSPATH')) {
@@ -29,14 +29,17 @@ class Post_Count_Stats {
     public function add_dashboard_widget() {
         wp_add_dashboard_widget(
             'posts_counts_stats_dashboard_widget',
-            'Posts Counts Stats (Yearly Summary)',
+	    'Posts Counts Stats (Yearly Summary)  <p style="margin-top: 15px;"><a href="' . admin_url('options-general.php?page=posts-counts-stats') . '" class="button button-secondary">View details</a></p>'
+	    ,
             [$this, 'render_dashboard_widget']
         );
     }
 
     public function render_dashboard_widget() {
+        // Render the simplified version inside the Dashboard widget (years only)
         $this->render_settings_page(true);
         
+        // Add a shortcut link to the full details page
         echo '<p style="margin-top: 15px;"><a href="' . admin_url('options-general.php?page=posts-counts-stats') . '" class="button button-secondary">View Monthly Details & Graphs</a></p>';
     }
 
@@ -50,6 +53,7 @@ class Post_Count_Stats {
 
         $all_posts = 0;
 
+        // Get post counts grouped by years and months (ordered chronologically: oldest to newest)
         $stats = $wpdb->get_results("
             SELECT 
                 YEAR(post_date) AS year,
@@ -66,10 +70,11 @@ class Post_Count_Stats {
             return;
         }
 
-        $organized_stats = [];
-        $yearly_totals = [];
-        $monthly_totals = array_fill(1, 12, 0);
-        $years_list = [];
+        // Organize data structure
+        $organized_stats = []; // Structure: [year][month] = count
+        $yearly_totals = [];   // Structure: [year] = total_count
+        $monthly_totals = array_fill(1, 12, 0); // Structure: [month] = total_count across all years
+        $years_list = [];      // Distinct list of years found in database
 
         foreach ($stats as $stat) {
             $year = $stat->year;
@@ -91,8 +96,10 @@ class Post_Count_Stats {
             $all_posts += $post_count;
         }
 
+        // Sort years chronologically (oldest to newest) so the latest year is on the far right
         sort($years_list);
 
+        // Render simple CSS bar graph ON TOP
         echo '<h2 style="margin-top:20px;">Yearly Bar Graph</h2>';
         echo '<div style="background:#fff; border:1px solid #ccd0d4; padding:20px; margin-bottom:20px; max-width:600px;">';
         $max_yearly = max($yearly_totals) > 0 ? max($yearly_totals) : 1;
@@ -110,7 +117,9 @@ class Post_Count_Stats {
         }
         echo '</div>';
 
+        // Conditional rendering based on view context
         if ($year_only) {
+            // Dashboard Widget View: Display simple list table (reverse order for list presentation)
             $reverse_years = array_reverse($years_list);
             echo '<table class="wp-list-table widefat fixed striped posts" style="max-width: 600px;">';
             echo '<thead><tr><th>Time Period</th><th>Post Count</th></tr></thead>';
@@ -128,10 +137,12 @@ class Post_Count_Stats {
             echo '</tr>';
             echo '</tbody></table>';
         } else {
+            // Full Details View: Render single matrix/grid table
             echo '<h2>Detailed Statistics Matrix</h2>';
             echo '<div style="overflow-x: auto; max-width: 100%; margin-bottom: 20px;">';
             echo '<table class="wp-list-table widefat fixed striped posts" style="width: auto; min-width: 600px; border-collapse: collapse;">';
             
+            // Header Row: Months / Years
             echo '<thead><tr style="background: #f6f7f7;">';
             echo '<th style="border: 1px solid #c3c4c7; padding: 10px; font-weight: bold;">Month</th>';
             foreach ($years_list as $year) {
@@ -142,6 +153,7 @@ class Post_Count_Stats {
             
             echo '<tbody>';
             
+            // Data Rows: Months 1 to 12
             for ($m = 1; $m <= 12; $m++) {
                 $month_name = date_i18n('F', mktime(0, 0, 0, $m, 1));
                 $month_padded = str_pad($m, 2, '0', STR_PAD_LEFT);
@@ -161,10 +173,12 @@ class Post_Count_Stats {
                     echo '</td>';
                 }
                 
+                // Monthly Total column across all years
                 echo '<td style="border: 1px solid #c3c4c7; padding: 8px; text-align: center; font-weight: bold; background: #f6f7f7;">' . esc_html($monthly_totals[$m]) . '</td>';
                 echo '</tr>';
             }
             
+            // Footer Row: Yearly Totals
             echo '<tr style="background: #edeeee; font-weight: bold; border-top: 2px solid #c3c4c7;">';
             echo '<td style="border: 1px solid #c3c4c7; padding: 10px;">Total</td>';
             foreach ($years_list as $year) {
@@ -173,6 +187,7 @@ class Post_Count_Stats {
                 echo '<a href="' . esc_url($year_url) . '">' . esc_html($yearly_totals[$year]) . '</a>';
                 echo '</td>';
             }
+            // Grand Total (bottom right corner)
             echo '<td style="border: 1px solid #c3c4c7; padding: 10px; text-align: center; background: #d3d3d3; font-weight: bold; border: 2px solid #999;">' . esc_html($all_posts) . '</td>';
             echo '</tr>';
             
@@ -185,4 +200,5 @@ class Post_Count_Stats {
     }
 }
 
+// Initialize the plugin
 new Post_Count_Stats();
