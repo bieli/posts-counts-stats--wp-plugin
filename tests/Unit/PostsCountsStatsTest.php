@@ -5,6 +5,12 @@ namespace Tests\Unit;
 use PHPUnit\Framework\TestCase;
 use Post_Count_Stats;
 
+if (!function_exists('add_action')) {
+    function add_action($hook, $callback, $priority = 10, $accepted_args = 1) { return true; }
+}
+if (!function_exists('wp_add_dashboard_widget')) {
+    function wp_add_dashboard_widget($widget_id, $widget_name, $callback, $control_callback = null, $callback_args = null) { return true; }
+}
 if (!function_exists('esc_html')) {
     function esc_html($text) { return $text; }
 }
