@@ -33,4 +33,4 @@ jobs:
       run: composer install --prefer-dist --no-progress
 
     - name: Run specific test file
-      run: composer run-script test -- tests/Unit/PostsCountsStatsTest.php
+      run: composer run-script test -- --bootstrap vendor/autoload.php tests/Unit/PostsCountsStatsTest.php
