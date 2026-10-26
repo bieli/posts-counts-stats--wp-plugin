@@ -10,14 +10,14 @@
     },
     "autoload": {
         "psr-4": {
-            "Project\\": "/"
+            "posts-counts-stats--wp-plugin\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Project\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
-    },
+    }
     "scripts": {
         "test": "phpunit"
     }
