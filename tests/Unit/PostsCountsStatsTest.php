@@ -27,6 +27,8 @@ class PostsCountsStatsTest extends TestCase {
             define('ABSPATH', dirname(__DIR__, 2) . '/');
         }
 
+        require_once ABSPATH . 'posts-counts-stats.php';
+
         $wpdbMock = $this->getMockBuilder(\stdClass::class)
             ->allowMockingUnknownTypes()
             ->addMethods(['get_results'])
