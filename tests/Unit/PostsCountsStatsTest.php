@@ -12,6 +12,9 @@ namespace {
     if (!function_exists('esc_attr')) {
         function esc_attr($text) { return $text; }
     }
+    if (!function_exists('esc_url')) {
+        function esc_url($url) { return $url; }
+    }
     if (!function_exists('admin_url')) {
         function admin_url($path) { return 'https://example.com' . $path; }
     }
